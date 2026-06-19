@@ -1,4 +1,4 @@
-package Model;
+package tictactoe.Model;
 
 public class Player {
     public String name;

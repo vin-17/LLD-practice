@@ -1,4 +1,4 @@
-package Model;
+package tictactoe.Model;
 import java.util.*;
 
 public class Board {
@@ -42,7 +42,7 @@ public class Board {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (board[i][j] != null) {
-                    System.out.print(board[i][j].getPieceType().name() + "   ");
+                    System.out.print(board[i][j].pieceType.name() + "   ");
                 } else {
                     System.out.print("    ");
 

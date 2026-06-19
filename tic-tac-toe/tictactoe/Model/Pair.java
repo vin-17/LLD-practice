@@ -1,4 +1,4 @@
-package Model;
+package tictactoe.Model;
 
 public class Pair<A, B> {
 

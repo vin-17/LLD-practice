@@ -1,4 +1,4 @@
-package Model.tictactoeLLD;
+package tictactoe.Model;
 
 public class PlayingPiece {
     public PieceType pieceType;
