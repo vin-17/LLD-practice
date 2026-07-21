@@ -44,7 +44,6 @@ class LogisticsService {
     }
 }
 
-// Driver Code
 class Main {
     public static void main(String[] args) {
         LogisticsService service = new LogisticsService();
