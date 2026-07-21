@@ -106,3 +106,18 @@ Client ---> Context ---has-a---> «interface» Strategy
 3. Name the 3 constructor params across the concrete strategies. Why does each strategy own its own config instead of `Order` holding all of it?
 4. What has to change in `ShippingCostService.java` to add a 5th shipping strategy? (Trick question — answer should be "nothing.")
 5. Why is `strategy.calculateCost(order)` a *single dispatch* call able to replace a 5-branch if-else? (Answer: polymorphism — the JVM resolves the correct override based on the object's runtime type.)
+
+<details>
+<summary>Answers (try to answer first, then check)</summary>
+
+1. **The interface (`ShippingStrategy`)**, not any concrete class — see [`ShippingCostService.java:4`](solution/ShippingCostService.java). This matters because it's what makes the field swappable: the context can hold *any* current or future implementation without knowing its concrete type. Program to an interface, not an implementation.
+
+2. **At the call site `strategy.calculateCost(order)`**, resolved by the JVM via dynamic (virtual) dispatch based on the actual runtime type of the object stored in `strategy` — decided the moment `setStrategy(...)` or the constructor assigned that field, not when `calculateShippingCost()` is called. Compare to the naive version, where the branch is re-decided from a string on *every single call*.
+
+3. `rate` (`FlatRateShippingStrategy`), `ratePerKg` (`WeightBasedShippingStrategy`), `ratePerKm` (`DistanceBasedShippingStrategy`) — plus `baseFee` (`ThirdPartyApiShippingStrategy`), so 4 total. Each strategy owns its own config because that config is *specific to how that one algorithm computes cost* — it's not a property of the `Order` itself. Keeping it on the strategy keeps `Order` a plain data holder and keeps each algorithm's parameters encapsulated with the algorithm that uses them (single responsibility).
+
+4. **Nothing.** Write a new class implementing `ShippingStrategy`, instantiate it at the client, call `setStrategy(...)`. `ShippingCostService` never references any concrete strategy class, so it's closed for modification — exactly the Open/Closed Principle payoff called out in section 2.
+
+5. Because all concrete strategies implement the same `ShippingStrategy` interface, `strategy.calculateCost(order)` doesn't need to know *which* one it's holding — the JVM looks up the correct override on the object's actual runtime class (vtable dispatch) and calls it directly. One polymorphic call site replaces N branches because the "branching" already happened once, earlier, when the strategy object was chosen and assigned.
+
+</details>
