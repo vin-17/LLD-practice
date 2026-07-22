@@ -1,6 +1,5 @@
 package builderpattern.problem;
 import java.util.*;
-import java.util.*;
 
 // Represents a customizable Burger Meal
 class BurgerMeal {
